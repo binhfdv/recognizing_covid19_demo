@@ -42,3 +42,5 @@ Werkzeug==2.0.1
 tensorflow-gpu==2.9.1
 opencv==3.4.1
 matplotlib==3.5.1
+dvc[gdrive]==2.13.0
+django==4.0.6
