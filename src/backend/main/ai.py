@@ -1,20 +1,37 @@
 import os
 import pickle
-import joblib
 import librosa
 import librosa.display
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+import subprocess
 from tensorflow import keras
 from matplotlib import pylab
 from .models import TripleInputGenerator
 
+url_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),f"weights/img_cough/")
 le_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),f"weights/label_encoder/")
 CUDA_VISIBLE_DEVICES = ""
 
-
 def feature_extractor(row, nfft=2048, hoplen=512, nmels=224):
     audio, sr = librosa.load(row, res_type="kaiser_fast")
+    # For MFCCS
+    mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=39)
+    mfccsscaled = np.mean(mfccs.T, axis=0)
+
+    # Mel Spectogram imagepaths
+    pylab.axis('off')  # no axis
+    pylab.axes([0., 0., 1., 1.], frameon=False, xticks=[], yticks=[])
+    melspec = librosa.feature.melspectrogram(y=audio, sr=sr)
+    s_db = librosa.power_to_db(melspec, ref=np.max)
+    librosa.display.specshow(s_db)
+
+    savepath = os.path.join(os.path.dirname(os.path.dirname(__file__)),f"weights/img_cough/current.png")
+    pylab.savefig(savepath, bbox_inches=None, pad_inches=0)
+    pylab.close()
+    return mfccsscaled, savepath
+
+def feature_extractor_raw(audio, sr, nfft=2048, hoplen=512, nmels=224):
+    #audio, sr = librosa.load(row, res_type="kaiser_fast")
     # For MFCCS
     mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=39)
     mfccsscaled = np.mean(mfccs.T, axis=0)
@@ -156,6 +173,58 @@ def extract(path, nfft=2048, hoplen=512, nmels=224):
 
     return {'mel':mel,'mel_chunk':mel_chunk,'mfcc_13':mfcc_13,'mfcc_13_chunk':mfcc_13_chunk,'mfcc_26':mfcc_26,'mfcc_26_chunk':mfcc_26_chunk,'mfcc_39':mfcc_39,'mfcc_39_chunk':mfcc_39_chunk}
 
+def extract_raw(data_raw, sample_rate, nfft=2048, hoplen=512, nmels=224):
+    START_SAMPLE = 10000
+    SAMPLES_TO_CONSIDER_FULL = 135440 # 5 seconcs
+    SAMPLES_TO_CONSIDER_CHUNK = 22050
+
+    #data_raw, sample_rate = librosa.load(path, res_type="kaiser_fast")
+        #FULL COUGH
+    data = librosa.util.fix_length(data_raw, SAMPLES_TO_CONSIDER_FULL) # take 5 seconds
+    data = data[START_SAMPLE:]
+
+    mel_spec = librosa.feature.melspectrogram(y=data,
+                                            sr=sample_rate,
+                                            n_fft=nfft,
+                                            hop_length=hoplen,
+                                            n_mels=nmels)
+    log_mel_spec = librosa.power_to_db(mel_spec)
+
+    mfcc = []
+    for i in range(3):
+          mfcc_i = librosa.feature.mfcc(y=data,
+                                  sr=sample_rate,
+                                  n_fft=nfft,
+                                  hop_length=hoplen,
+                                  n_mfcc=13*(i+1))
+          mfcc.append(mfcc_i)
+
+    mel, mfcc_13, mfcc_26, mfcc_39 = log_mel_spec, lengthen_cough(mfcc[0], int(nmels/13)+1), lengthen_cough(mfcc[1], int(nmels/26)+1), lengthen_cough(mfcc[2], int(nmels/39)+1)
+
+        #CHUNK COUGH
+    data = data_raw[START_SAMPLE:SAMPLES_TO_CONSIDER_CHUNK]
+    long_data = lengthen_cough(data, 10)
+
+    mel_spec = librosa.feature.melspectrogram(y=long_data,
+                                            sr=sample_rate,
+                                            n_fft=nfft,
+                                            hop_length=hoplen,
+                                            n_mels=nmels)
+    log_mel_spec = librosa.power_to_db(mel_spec)
+
+    mfcc = []
+    for i in range(3):
+          mfcc_i = librosa.feature.mfcc(y=long_data,
+                                  sr=sample_rate,
+                                  n_fft=nfft,
+                                  hop_length=hoplen,
+                                  n_mfcc=13*(i+1))
+          mfcc.append(mfcc_i)
+
+    mel_chunk, mfcc_13_chunk, mfcc_26_chunk, mfcc_39_chunk = log_mel_spec, lengthen_cough(mfcc[0], int(nmels/13)+1), lengthen_cough(mfcc[1], int(nmels/26)+1), lengthen_cough(mfcc[2], int(nmels/39)+1)
+
+    return {'mel':mel,'mel_chunk':mel_chunk,'mfcc_13':mfcc_13,'mfcc_13_chunk':mfcc_13_chunk,'mfcc_26':mfcc_26,'mfcc_26_chunk':mfcc_26_chunk,'mfcc_39':mfcc_39,'mfcc_39_chunk':mfcc_39_chunk}
+
 def def_shape(data):
     data = data[..., np.newaxis]
     data = data[np.newaxis, ...]
@@ -206,7 +275,7 @@ def predict(file,metadata):
                                     os.path.dirname(os.path.dirname(__file__)),
                                     f"weights/models/" + name))
         score = model.predict(x)
-        if ("smote" in name):
+        if ("smote" or "std" in name):
             temp = score[0][0]
             score[0][0]=score[0][1]
             score[0][1]=temp
@@ -214,3 +283,7 @@ def predict(file,metadata):
         res += score#model.predict(x)
         #sample_number = sample_number+1
     return (res /len(model_list))[0]#(res /sample_number)[0]
+
+def convert_webm_to_wav(file,old_dir,new_dir):
+    command = ['ffmpeg', '-y', '-i', os.path.join(old_dir,file), '-acodec', 'pcm_s16le', '-ac', '1', '-ar', '22050', os.path.join(new_dir,'soundwebm.wav')]
+    subprocess.run(command,stdout=subprocess.PIPE,stdin=subprocess.PIPE, shell=True)

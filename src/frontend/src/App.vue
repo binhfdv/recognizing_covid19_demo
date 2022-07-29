@@ -1,7 +1,6 @@
 <template>
 <div class="background" :class="{ otherColor: isSignIn }">
 
-
   <div class="page-loader" v-if="!isLoaded">
     <div style="background-color: #8cc271" class="cube first"></div>
     <div style="background-color: #69beeb" class="cube"></div>
@@ -10,135 +9,162 @@
   </div>
 
   <div id="head">
-      <img id="logouit" src="./assets/uit.png">
-      <p>Đề tài tốt nghiệp: Nhận diện Covid-19 qua tiếng ho <a target="_blank" style="color: #004fcf;" href="https://github.com/dee-ex/aicovidvn115m">[Github]</a></p>
+      <p content="width=device-width, initial-scale=1">ĐỀ TÀI: NHẬN DIỆN TIẾNG HO COVID-19
+      <a target="_blank" style="color: #01256b;" href="https://github.com/githubbinh/recognizing_covid19_demo"><img src="./assets/logo.png" alt="img" border="0" style="width: 32px"/></a>
+      </p>
   </div>
 
   <div>
-        <p id="head_1">Metadata User</p>
-        <table id="left_2" style="max-height: 200px; overflow-y: scroll">
+        <div id="up">
+          <button id="button" onclick="document.getElementById('inputfile').click()">CHỌN FILE</button>
+          <input type='file' id="inputfile" style="display:none" @change="onFileChange">
+          <button id="button" v-on:click="isHidden = !isHidden">Metadata</button>
+        </div>
+
+        <table v-if="!isHidden" id="table" style="max-height: 75x; overflow-y: scroll">
           <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
           </tr>
-
           <tr>
-            <td>country :  <br><input type="text" name=" country " v-model=" country "><br>
-                locality :  <br><input type="text" name=" locality " v-model=" locality "><br>
-                date_of_ct_scan :  <br><input type="text" name=" date_of_ct_scan " v-model=" date_of_ct_scan "><br>
-                has_ctScan :  <br><input type="text" name=" has_ctScan " v-model=" has_ctScan "><br>
-                ct_score :  <br><input type="text" name=" ct_score " v-model=" ct_score "><br>
-                test_type :  <br><input type="text" name=" test_type " v-model=" test_type "><br>
-                test_status :  <br><input type="text" name=" test_status " v-model=" test_status "><br>
-                vaccination_status :  <br><input type="text" name=" vaccination_status " v-model=" vaccination_status "><br>
-                respiratory_condition :  <br><input type="text" name=" respiratory_condition " v-model=" respiratory_condition "><br>
-                fever_muscle_pain :  <br><input type="text" name=" fever_muscle_pain " v-model=" fever_muscle_pain "><br>
-                is_english_proficiency :  <br><input type="text" name=" is_english_proficiency " v-model=" is_english_proficiency "><br>
-                is_returning_user :  <br><input type="text" name=" is_returning_user " v-model=" is_returning_user "><br>
-                is_smoker :  <br><input type="text" name=" is_smoker " v-model=" is_smoker "><br>
-                is_others_preexist_conditions :  <br><input type="text" name=" is_others_preexist_conditions " v-model=" is_others_preexist_conditions "><br>
-                is_chronic_lung_disease :  <br><input type="text" name=" is_chronic_lung_disease " v-model=" is_chronic_lung_disease "><br>
-                is_neumonia :  <br><input type="text" name=" is_neumonia " v-model=" is_neumonia "><br>
-                is_using_mask :  <br><input type="text" name=" is_using_mask " v-model=" is_using_mask "><br>
+            <td>Tuổi:<br><input type="text" name=" age " v-model=" age " style="background-color:#d6eaf2"><br>
+                Giới Tính:<br><input type="text" name=" gender " v-model=" gender " style="background-color:#d6eaf2"><br>
+                Quốc Gia:<br><input type="text" name=" country " v-model=" country " style="background-color:#d6eaf2"><br>
+                Khu vực:<br><input type="text" name=" locality " v-model=" locality " style="background-color:#d6eaf2"><br>
+                Tỉnh/thành:<br><input type="text" name=" state " v-model=" state " style="background-color:#d6eaf2"><br>
+                Có thực hiện CT scan:<br><input type="text" name=" has_ctScan " v-model=" has_ctScan " style="background-color:#d6eaf2"><br>
+                Ngày làm CT scan:<br><input type="text" name=" date_of_ct_scan " v-model=" date_of_ct_scan " style="background-color:#d6eaf2"><br>
+                Điểm CT scan:<br><input type="text" name=" ct_score " v-model=" ct_score " style="background-color:#d6eaf2"><br>
             </td>
-
-            <td>state :  <br><input type="text" name=" state " v-model=" state "><br>
-                latitude :  <br><input type="text" name=" latitude " v-model=" latitude "><br>
-                longitude :  <br><input type="text" name=" longitude " v-model=" longitude "><br>
-                quality_1 :  <br><input type="text" name=" quality_1 " v-model=" quality_1 "><br>
-                cough_type_1 :  <br><input type="text" name=" cough_type_1 " v-model=" cough_type_1 "><br>
-                dyspnea_1 :  <br><input type="text" name=" dyspnea_1 " v-model=" dyspnea_1 "><br>
-                wheezing_1 :  <br><input type="text" name=" wheezing_1 " v-model=" wheezing_1 "><br>
-                stridor_1 :  <br><input type="text" name=" stridor_1 " v-model=" stridor_1 "><br>
-                choking_1 :  <br><input type="text" name=" choking_1 " v-model=" choking_1 "><br>
-                congestion_1 :  <br><input type="text" name=" congestion_1 " v-model=" congestion_1 "><br>
-                nothing_1 :  <br><input type="text" name=" nothing_1 " v-model=" nothing_1 "><br>
-                diagnosis_1 :  <br><input type="text" name=" diagnosis_1 " v-model=" diagnosis_1 "><br>
-                severity_1 :  <br><input type="text" name=" severity_1 " v-model=" severity_1 "><br>
-                is_cold :<br>  <input type="text" name=" is_cold " v-model=" is_cold "><br>
-                is_hypertension :  <br><input type="text" name=" is_hypertension " v-model=" is_hypertension "><br>
-                is_diabetes :  <br><input type="text" name=" is_diabetes " v-model=" is_diabetes "><br>
-                is_cough :  <br><input type="text" name=" is_cough " v-model=" is_cough "><br>
+            <td>Loại test COVID-19:<br><input type="text" name=" test_type " v-model=" test_type " style="background-color:#d6eaf2"><br>
+                Kết quả test COVID-19:<br><input type="text" name=" test_status " v-model=" test_status " style="background-color:#d6eaf2"><br>
+                Đã tiêm Vác-xin:<br><input type="text" name=" vaccination_status " v-model=" vaccination_status " style="background-color:#d6eaf2"><br>
+                Tình trạng hệ hô hấp:<br><input type="text" name=" respiratory_condition " v-model=" respiratory_condition " style="background-color:#d6eaf2"><br>
+                Tiền án bệnh hệ hô hấp?:<br><input type="text" name=" is_others_preexist_conditions " v-model=" is_others_preexist_conditions " style="background-color:#d6eaf2"><br>
+                Có hút thuốc?:<br><input type="text" name=" is_smoker " v-model=" is_smoker " style="background-color:#d6eaf2"><br>
+                Có dùng khẩu trang?:<br><input type="text" name=" is_using_mask " v-model=" is_using_mask " style="background-color:#d6eaf2"><br>
+                Đau mỏi cơ và sốt:<br><input type="text" name=" fever_muscle_pain " v-model=" fever_muscle_pain " style="background-color:#d6eaf2"><br>
             </td>
-
-            <td>age :  <br><input type="text" name=" age " v-model=" age "><br>
-                gender :  <br><input type="text" name=" gender " v-model=" gender "><br>
-                status :  <br><input type="text" name=" status " v-model=" status "><br>
-                cough_type_2 :  <br><input type="text" name=" cough_type_2 " v-model=" cough_type_2 "><br>
-                dyspnea_2 :  <br><input type="text" name=" dyspnea_2 " v-model=" dyspnea_2 "><br>
-                wheezing_2 :  <br><input type="text" name=" wheezing_2 " v-model=" wheezing_2 "><br>
-                stridor_2 :  <br><input type="text" name=" stridor_2 " v-model=" stridor_2 "><br>
-                choking_2 :  <br><input type="text" name=" choking_2 " v-model=" choking_2 "><br>
-                congestion_2 :  <br><input type="text" name=" congestion_2 " v-model=" congestion_2 "><br>
-                nothing_2 :  <br><input type="text" name=" nothing_2 " v-model=" nothing_2 "><br>
-                diagnosis_2 :  <br><input type="text" name=" diagnosis_2 " v-model=" diagnosis_2 "><br>
-                severity_2 :  <br><input type="text" name=" severity_2 " v-model=" severity_2 "><br>
-                quality_2 :  <br><input type="text" name=" quality_2 " v-model=" quality_2 "><br>
-                is_fatigue :  <br><input type="text" name=" is_fatigue " v-model=" is_fatigue "><br>
-                is_sore_throat :  <br><input type="text" name=" is_sore_throat " v-model=" is_sore_throat "><br>
-                is_ischemic_heart_disease :  <br><input type="text" name=" is_ischemic_heart_disease " v-model=" is_ischemic_heart_disease "><br>
-                is_asthma :  <br><input type="text" name=" is_asthma " v-model=" is_asthma "><br>
+            <td>Ho?:<br><input type="text" name=" is_cough " v-model=" is_cough " style="background-color:#d6eaf2"><br>
+                Sốt?:<br><input type="text" name=" is_fever " v-model=" is_fever " style="background-color:#d6eaf2"><br>
+                Mất mùi vị?:<br><input type="text" name=" is_loss_of_smell " v-model=" is_loss_of_smell " style="background-color:#d6eaf2"><br>
+                Đau cơ?:<br><input type="text" name=" is_muscle_pain " v-model=" is_muscle_pain " style="background-color:#d6eaf2"><br>
+                Khó thở?:<br><input type="text" name=" is_breathing_difficulty " v-model=" is_breathing_difficulty " style="background-color:#d6eaf2"><br>
+                Mệt mỏi?:<br><input type="text" name=" is_fatigue " v-model=" is_fatigue " style="background-color:#d6eaf2"><br>
+                Đau cổ họng?:<br><input type="text" name=" is_sore_throat " v-model=" is_sore_throat " style="background-color:#d6eaf2"><br>
+                Cảm lạnh:<br><input type="text" name=" is_cold " v-model=" is_cold " style="background-color:#d6eaf2"><br>
             </td>
-
-            <td>
-                name :  <br><input type="text" name=" name " v-model=" name "><br>
-                is_diarrheoa :  <br><input type="text" name=" is_diarrheoa " v-model=" is_diarrheoa "><br>
-                is_fever :  <br><input type="text" name=" is_fever " v-model=" is_fever "><br>
-                is_loss_of_smell :  <br><input type="text" name=" is_loss_of_smell " v-model=" is_loss_of_smell "><br>
-                is_muscle_pain :  <br><input type="text" name=" is_muscle_pain " v-model=" is_muscle_pain "><br>
-                is_breathing_difficulty :  <br><input type="text" name=" is_breathing_difficulty " v-model=" is_breathing_difficulty "><br>
-                is_others_resp :  <br><input type="text" name=" is_others_resp " v-model=" is_others_resp "><br>
-                quality_3 :  <br><input type="text" name=" quality_3 " v-model=" quality_3 "><br>
-                dyspnea_3 :  <br><input type="text" name=" dyspnea_3 " v-model=" dyspnea_3 "><br>
-                wheezing_3 :  <br><input type="text" name=" wheezing_3 " v-model=" wheezing_3 "><br>
-                stridor_3 :  <br><input type="text" name=" stridor_3 " v-model=" stridor_3 "><br>
-                choking_3 :  <br><input type="text" name=" choking_3 " v-model=" choking_3 "><br>
-                congestion_3 :  <br><input type="text" name=" congestion_3 " v-model=" congestion_3 "><br>
-                nothing_3 :  <br><input type="text" name=" nothing_3 " v-model=" nothing_3 "><br>
-                cough_type_3 :  <br><input type="text" name=" cough_type_3 " v-model=" cough_type_3 "><br>
-                diagnosis_3 :  <br><input type="text" name=" diagnosis_3 " v-model=" diagnosis_3 "><br>
-                severity_3 :  <br><input type="text" name=" severity_3 " v-model=" severity_3 "><br>
+            <td>Bệnh mãn tính liên quan phổi?:<br><input type="text" name=" is_chronic_lung_disease " v-model=" is_chronic_lung_disease " style="background-color:#d6eaf2"><br>
+                Bệnh liên quan tới tim?:<br><input type="text" name=" is_ischemic_heart_disease " v-model=" is_ischemic_heart_disease " style="background-color:#d6eaf2"><br>
+                Bệnh liên quan tới huyết áp:<br><input type="text" name=" is_hypertension " v-model=" is_hypertension " style="background-color:#d6eaf2"><br>
+                Tiêu chảy?:<br><input type="text" name=" is_diarrheoa " v-model=" is_diarrheoa " style="background-color:#d6eaf2"><br>
+                Tiểu đường?:<br><input type="text" name=" is_diabetes " v-model=" is_diabetes " style="background-color:#d6eaf2"><br>
+                Hen xuyễn?:<br><input type="text" name=" is_asthma " v-model=" is_asthma " style="background-color:#d6eaf2"><br>
+                Viêm phổi?:<br><input type="text" name=" is_neumonia " v-model=" is_neumonia " style="background-color:#d6eaf2"><br>
+                Các triệu chứng về hô hấp khác?:<br><input type="text" name=" is_others_resp " v-model=" is_others_resp " style="background-color:#d6eaf2"><br>
             </td>
           </tr>
         </table>
-
   </div>
 
   <div id="up" class ="terms_1">
-    <button id="button" onclick="document.getElementById('inputfile').click()">CHỌN FILE</button>
-    <input type='file' id="inputfile" style="display:none" @change="onFileChange">
     <button id="process" @click="onProcess">DỰ ĐOÁN</button>
   </div>
 
+    <div style="padding-left: 1%;">
+                <button id="button1" v-on:click="isHidden2 = !isHidden2" ><p>Ghi âm</p>
+                    <vue-record-audio :mode="recordMode.audio" @stream="onStream" @result="onResult"/>
+                </button>
+    </div>
+
   <div id="down">
+
       <div id="left">
+        <p v-if ="!isHidden2">Đang thu...</p>
         <audio controls v-if="url" :key="url">
           <source :src="url" alt="file đầu vào" type="audio/wav">
         </audio>
       </div>
       <div id="right">
         <h2 style="color: black">
-          RS:
+          Kết quả:
           <span v-if="res" v-bind:class="{low: low, low_mid: low_mid, mid: mid, mid_high: mid_high, high: high}">{{ res }}</span>
         </h2>
       </div>
   </div>
 
-  <footer>	<p><b>SVTH</b>: Dương Văn Bình - Lê Trần Hoài Ân</p>
-			<p><b>GVHD</b>: TS. Đỗ Trọng Hợp</p>
-  </footer>
+  <footer>
+  <div class="flex w-full rounded-xl bg-white p-5 mb-auto my-5 justify-between mb-10">
+      <div  class="" style="height:50px; width:356px;">
+        <h5 style="font-size:15px">
+            <b>Khóa luận tốt nghiệp Ngành Khoa học Dữ liệu</b>
+        </h5>
+            <p><b>SVTH</b>: Dương Văn Bình - Lê Trần Hoài Ân</p>
+            <p><b>GVHD</b>: TS. Đỗ Trọng Hợp - ThS. Tạ Thu Thủy</p>
+      </div>
 
+      <div class="" style="float:right;">
+       <img src="./assets/uit.png" alt="img" border="0" style="width: 356px"/>
+      </div>
+    </div>
+    <div style="height: 50px;"></div>
+  </footer>
 </div>
+
 </template>
 
 <script>
 
+function downloadBlob(blob, name = 'file.txt') {
+    if (
+      window.navigator &&
+      window.navigator.msSaveOrOpenBlob
+    ) return window.navigator.msSaveOrOpenBlob(blob);
+
+    // For other browsers:
+    // Create a link pointing to the ObjectURL containing the blob.
+    const data = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = data;
+    link.download = name;
+
+    link.style.display = 'none';
+    document.body.appendChild(link);
+
+    link.click();
+    document.body.removeChild(link);
+
+
+    // this is necessary as link.click() does not work on the latest firefox
+    //link.dispatchEvent(
+    //  new MouseEvent('click', {
+    //    bubbles: true,
+    //    cancelable: true,
+    //    view: window
+    //  })
+    //);
+
+    setTimeout(() => {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(data);
+      link.remove();
+    }, 100);
+}
+
+import VueRecordAudio from "./components/VueRecordAudio";
+
 export default {
   name: 'App',
+  components : {VueRecordAudio},
   data() {
     return {
+      recordMode: {audio: 'press',video: 'press'},
+      recordings: [],
+      isHidden: true,
+      isHidden2: true,
       isLoaded: false,
       file: null,
       url: null,
@@ -228,6 +254,26 @@ export default {
     }
   },
   methods: {
+    removeRecord (index) {
+      this.recordings.splice(index)
+    },
+    onStream (stream) {
+      console.log('Got a stream object:', stream);
+    },
+    onVideoStream (stream) {
+      console.log('Got a video stream object:', stream);
+    },
+    onVideoResult (data) {
+      this.$refs.Video.srcObject = null
+      this.$refs.Video.src = window.URL.createObjectURL(data)
+    },
+    onResult (data) {
+      downloadBlob(data, 'myfile.webm');
+      this.isHidden2 = true;
+      this.recordings.push({
+        src: window.URL.createObjectURL(data)
+      })
+    },
     onFileChange(e) {
       this.file = e.target.files[0];
       console.log(this.file);
@@ -235,8 +281,8 @@ export default {
     },
     onProcess() {
       this.isLoaded = false;
-
       this.fd = new FormData();
+        this.fd.append("file",this.formData);
         this.fd.append("name",this.name);
         this.fd.append("url",this.url);
         this.fd.append("is_english_proficiency", this.is_english_proficiency);
@@ -308,8 +354,7 @@ export default {
         this.fd.append("severity_3", this.severity_3);
         this.fd.append("num_chunk", this.num_chunk);
         this.fd.append("audio_1", this.file);
-      this.fd.append("audio", this.file);
-
+        this.fd.append("audio", this.file);
       fetch("http://localhost:8000/api/predict/", {method: "POST", body: this.fd})
       .then(response => response.json())
       .then(data => {
@@ -326,7 +371,7 @@ export default {
           this.mid = false;
           this.mid_high = false;
           this.high = false;
-        } 
+        }
         else if (.7 - this.res >= 1e-9) {
           this.low = false;
           this.low_mid = false;
@@ -346,29 +391,54 @@ export default {
           this.mid_high = false;
           this.high = true;
         }
-
         this.isLoaded = true;
       });
     },
   },
 }
+
 </script>
 
 <style>
 
-.background {
-  height: 150vh;
-  width: 98vw;
-  background-color: #a8bbbf;
+#apple {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
 }
+
+.audio{
+    width: 400px;
+    height: 100px;
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid #757575;
+    margin: 50px auto;
+}
+
+.audio audio{
+    outline: none;
+}
+
+.background {
+  height: 90vh;
+  width: 98vw;
+  background-color: #f3f0ec;
+}
+
 .otherColor {
   background-color: blue;
 }
+
 @keyframes left {
   40% {
     transform: translateX(-60px);
   }
-
   50% {
     transform: translateX(0);
   }
@@ -378,7 +448,6 @@ export default {
   40% {
     transform: translateX(60px);
   }
-
   50% {
     transform: translateX(0);
   }
@@ -394,7 +463,6 @@ export default {
 
 div {
   border-radius: 12px;
-  background-color: gray;
 }
 
 .page-loader {
@@ -427,26 +495,29 @@ div {
 #head {
     padding: 15px;
     text-align: center;
-    background-color: #ffa263;
+    background-color: #d6eaf2;
     font-size: 30px;
     font-weight: bold;
-    color: blue;
+    color: #01256b;
     margin: 1%;
 }
 #head_1 {
-    padding: 10px;
+    padding: 15px;
     text-align: center;
+    justify-content: center;
     font-size: 20px;
     font-weight: bold;
     color: black;
-    margin: .1%;
+    margin: 1%;
+    background-color: #6B7175;
 }
 
 #up {
-    padding: 10px 10px;
+    padding: 1px 1px;
     margin: 1%;
     padding-left: 37%;
 }
+
 
 #logohcmut {
     width: 50%;
@@ -458,6 +529,10 @@ div {
     width: 60%;
     height: 60%;
     cursor: pointer;
+}
+
+.button:active {
+    background-color: red;
 }
 
 #button {
@@ -474,12 +549,39 @@ div {
     margin-right: 10px;
 }
 
+#button1 {
+    display: block;
+    background-color: white;
+    border: 2px solid #074B80;
+    color: black;
+
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 75px;
+    margin-right: 5px;
+}
+
+#button2 {
+    display: block;
+    background-color: white;
+    border: 2px solid #074B80;
+    color: black;
+    padding: 5px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
+    margin-right: 10px;
+}
 #process {
     display: block;
     background-color: white;
     border: 2px solid #4CAF50;
     color: black;
-    padding: 15px 32px;
+    padding: 15px 110px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -488,6 +590,11 @@ div {
 }
 
 #button:hover {
+    background-color: #074B80;
+    color: white;
+    cursor: pointer;
+}
+#button1:hover {
     background-color: #074B80;
     color: white;
     cursor: pointer;
@@ -501,7 +608,7 @@ div {
 
 #left {
     float: left;
-    background: white;
+    background: #d6eaf2;
     width: 48%;
     height: 200px;
     margin: 1%;
@@ -512,7 +619,7 @@ div {
 
 #right {
     float: right;
-    background: white;
+    background: #d6eaf2;
     width: 48%;
     height: 200px;
     margin: 1%;
@@ -521,15 +628,17 @@ div {
     justify-content: center;
 }
 
-#left_2 {
+#table {
     float: left;
-    background: white;
     width: 98%;
     height: 700px;
     display: flex;
     margin: 1%;
     align-items: left;
-    justify-content: left;
+    justify-content: center;
+    background-color: #d6eaf2;
+    max-height: 110px;
+    overflow-y: scroll;
 }
 
 
@@ -562,6 +671,43 @@ div {
     display: block;
     margin: 10px 10px;
 }
+
+.vue-audio-recorder, .vue-video-recorder {
+  margin-right: 16px;
+}
+
+.record-settings {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.recorded-audio {
+  height: 100px;
+  overflow: auto;
+  border: thin solid #eee;
+  background-color: #f7f7f7;
+  padding: 10px 5px;
+  .recorded-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1px;
+  }
+  .audio-container {
+    display: flex;
+    height: 54px;
+    margin-right: 16px;
+  }
+}
+
+.recorded-video {
+  video {
+    width: 100%;
+    max-height: 400px;
+  }
+}
+
 
 footer {
     margin: 1%;

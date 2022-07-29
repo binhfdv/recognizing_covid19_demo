@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@codekraft-studio/vue-record": "^0.0.3",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^13.0.2",
+    "vue-audio-recorder": "^3.0.1",
+    "vue-loader": "^15.10.0"
+  }
+}
