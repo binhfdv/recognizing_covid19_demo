@@ -8,4 +8,9 @@
 ```pip install -r requirements.txt ```
 4. Tải các mô hình Cough Detection và COVID-19 Cough Recognition:
 ```dvc pull```
-5. 
+5. Khởi động back end
+```cd src/backend/```
+```python manage.py runserver
+6. Khởi động front end
+```cd src/frontend/```
+```npm run serve```
