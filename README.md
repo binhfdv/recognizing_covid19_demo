@@ -10,7 +10,7 @@
 ```dvc pull```
 5. Khởi động back end
 ```cd src/backend/```
-```python manage.py runserver
+```python manage.py runserver```
 6. Khởi động front end
 ```cd src/frontend/```
 ```npm run serve```
